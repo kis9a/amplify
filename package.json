@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && next export",
     "start": "next start",
     "type-check": "tsc --pretty --noEmit",
     "format": "prettier --write .",
@@ -24,6 +24,9 @@
     ]
   },
   "dependencies": {
+    "@aws-amplify/ui-components": "^0.8.4",
+    "@aws-amplify/ui-react": "^0.2.21",
+    "aws-amplify": "^3.0.20",
     "next": "latest",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"

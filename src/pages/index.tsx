@@ -1,10 +1,16 @@
-// import awsconfig from './e'
-// import { AmplifySignOut, withAuth } from '@amplify/ui-react'
+import awsconfig from '../aws-exports'
+import Amplify from 'aws-amplify'
+// import { AuthState } from '@aws-amplify/ui-components'
+import { AmplifyAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
+
+Amplify.configure(awsconfig)
 
 export const Home = (): JSX.Element => (
-  <div className="container">
-    <h1>hello</h1>
-  </div>
+  <AmplifyAuthenticator>
+    <div>
+      <AmplifySignOut />
+    </div>
+  </AmplifyAuthenticator>
 )
 
 export default Home
