@@ -3,8 +3,7 @@ import awsExports from '../aws-exports'
 import Amplify from 'aws-amplify'
 import { AmplifyAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
-import AddItem from '../components/Add'
-import ListItem from '../components/List'
+import Todo from '../components/Todo'
 import store from '../store'
 import { Provider } from 'react-redux'
 
@@ -24,8 +23,7 @@ function Index() {
   return authState === AuthState.SignedIn && user ? (
     <Provider store={store}>
       <div className="App">
-        <AddItem />
-        <ListItem />
+        <Todo />
         <AmplifySignOut />
       </div>
     </Provider>
