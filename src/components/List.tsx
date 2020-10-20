@@ -1,6 +1,7 @@
 import React from 'react'
 import { API, graphqlOperation } from 'aws-amplify'
 import { listTodos } from '../graphql/queries'
+import { deleteTodo } from '../graphql/mutations'
 
 export interface GraphQLResult {
   data?: Record<string, any>
@@ -13,10 +14,19 @@ export interface GraphQLResult {
 const ListItem = () => {
   const [list, setList] = React.useState<GraphQLResult>()
 
+  const onDeleteTodo = async (id: number) => {
+    const data = { id: id }
+    try {
+      await API.graphql(graphqlOperation(deleteTodo, { input: data }))
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   React.useEffect(() => {
     const fetch = async () => {
       try {
-        const result = await API.graphql!(graphqlOperation(listTodos))
+        const result = await API.graphql(graphqlOperation(listTodos))
         setList({ data: result })
       } catch (e) {
         console.error(e)
@@ -30,9 +40,20 @@ const ListItem = () => {
     return todoList.items ? (
       <div>
         <ul style={{ listStyleType: 'none' }}>
-          {todoList.items.map((item: { name: string }, index: number) => (
-            <li key={index}>{item.name}</li>
-          ))}
+          {todoList.items.map(
+            (item: { name: string; id: number }, index: number) => (
+              <div key={index}>
+                <li>{item.name}</li>
+                <button
+                  onClick={() => {
+                    onDeleteTodo(item.id)
+                  }}
+                >
+                  delete
+                </button>
+              </div>
+            )
+          )}
         </ul>
       </div>
     ) : (
