@@ -5,6 +5,8 @@ import { AmplifyAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
 import AddItem from '../components/Add'
 import ListItem from '../components/List'
+import store from '../store'
+import { Provider } from 'react-redux'
 
 Amplify.configure(awsExports)
 
@@ -20,11 +22,13 @@ function Index() {
   }, [])
 
   return authState === AuthState.SignedIn && user ? (
-    <div className="App">
-      <AddItem />
-      <ListItem />
-      <AmplifySignOut />
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <AddItem />
+        <ListItem />
+        <AmplifySignOut />
+      </div>
+    </Provider>
   ) : (
     <div className="container">
       <div className="signIn">
