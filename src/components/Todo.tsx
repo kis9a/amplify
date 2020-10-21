@@ -39,23 +39,26 @@ const ListItem = () => {
   if (list) {
     const todoList = list.data?.data.listTodos
     return todoList.items ? (
-      <div>
-        <ul style={{ listStyleType: 'none' }}>
+      <div className="my-4">
+        <div style={{ listStyleType: 'none' }}>
           {todoList.items.map(
             (item: { name: string; id: number }, index: number) => (
-              <div key={index}>
-                <li>{item.name}</li>
+              <div key={index} className="w-full py-2">
+                <button className="w-5/6 bg-gray-200 hover:bg-gray-100 text-black py-2 px-4 rounded shadow">
+                  {item.name}
+                </button>
                 <button
+                  className="w-1/6 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-4 rounded shadow"
                   onClick={() => {
                     onDeleteTodo(item.id)
                   }}
                 >
-                  delete
+                  <span>Delete</span>
                 </button>
               </div>
             )
           )}
-        </ul>
+        </div>
       </div>
     ) : (
       <div>not exit on todoList</div>
@@ -78,21 +81,32 @@ const AddItem = () => {
   }
 
   return (
-    <div>
-      <h1>todo list</h1>
-      <input onChange={(e) => setItem(e.target.value)}></input>
-      <button onClick={() => save()}>SAVE</button>
+    <div className="input-section">
+      <div className="flex items-center w-full">
+        <input
+          className="shadow appearance-none border rounded w-60 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-4"
+          onChange={(e) => setItem(e.target.value)}
+          id="username"
+          type="text"
+          placeholder="Todo"
+        />
+        <button
+          className="h-10 bg-yellow-500 hover:bg-yellow-400 text-black py-2 px-4 rounded shadow"
+          onClick={() => save()}
+        >
+          Save
+        </button>
+      </div>
     </div>
   )
 }
 
 const Todo = () => {
   return (
-    <div>
+    <div className="max-w-3xl">
       <AddItem />
       <ListItem />
     </div>
   )
 }
-
 export default Todo

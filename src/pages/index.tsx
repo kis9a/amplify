@@ -23,8 +23,14 @@ function Index() {
   return authState === AuthState.SignedIn && user ? (
     <Provider store={store}>
       <div className="App">
-        <Todo />
-        <AmplifySignOut />
+        <div className="Layout m-4">
+          <Todo />
+          <div className="w-full text-right">
+            <div className="w-12 mt-32 rounded">
+              <AmplifySignOut />
+            </div>
+          </div>
+        </div>
       </div>
     </Provider>
   ) : (

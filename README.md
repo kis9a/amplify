@@ -14,3 +14,5 @@
 ```bash
 npx create-next-app --example with-typescript-eslint-jest with-typescript-eslint-jest-app
 ```
+
+![image](https://user-images.githubusercontent.com/65019715/108652414-6e426d00-7507-11eb-9ad6-944b4d62ced5.png)
