@@ -12,9 +12,20 @@ export interface GraphQLResult {
   }
 }
 
-const ListItem = () => {
+const Todo = () => {
   const [list, setList] = React.useState<GraphQLResult>()
   const [isEdit, setIsEdit] = React.useState<boolean[]>([])
+  const [item, setItem] = React.useState<string>()
+
+  const onCreateTodo = async () => {
+    const data = { name: item }
+    try {
+      await API.graphql(graphqlOperation(createTodo, { input: data }))
+    } catch (e) {
+      console.error(e)
+    }
+    getListTodos()
+  }
 
   const onDeleteTodo = async (id: number) => {
     const data = { id: id }
@@ -23,14 +34,16 @@ const ListItem = () => {
     } catch (e) {
       console.error(e)
     }
+    getListTodos()
   }
 
-  const toggleEdit = (index: number) => {
+  const onToggleEdit = (index: number) => {
     if (typeof isEdit[index] !== 'boolean') {
       isEdit[index] = false
     }
     isEdit[index] = !isEdit[index]
     setIsEdit(isEdit)
+    getListTodos()
   }
 
   const getListTodos = async () => {
@@ -48,72 +61,11 @@ const ListItem = () => {
     // [] useEffect is called when mounted & unmounted
   }, [])
 
-  if (list) {
-    const todoList = list.data?.data.listTodos
-    return todoList.items ? (
-      <div className="my-4">
-        <div style={{ listStyleType: 'none' }}>
-          {todoList.items.map(
-            (item: { name: string; id: number }, index: number) => (
-              <div key={index} className="w-full py-2">
-                {isEdit[index] ? (
-                  <button
-                    className="w-5/6 bg-gray-200 hover:bg-gray-100 text-black py-2 px-4 rounded shadow"
-                    onClick={() => toggleEdit(index)}
-                  >
-                    {item.name}
-                  </button>
-                ) : (
-                  <div>
-                    <input
-                      value={item.name}
-                      className="w-4/6 text-black py-2 px-4 rounded shadow"
-                      onClick={() => toggleEdit(index)}
-                    />
-                    <button
-                      className="w-5/6 bg-gray-200 hover:bg-gray-100 text-black py-2 px-4 rounded shadow"
-                      onClick={() => toggleEdit(index)}
-                    >
-                      {item.name}
-                    </button>
-                  </div>
-                )}
-                <button
-                  className="w-1/6 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-4 rounded shadow"
-                  onClick={() => {
-                    onDeleteTodo(item.id)
-                  }}
-                >
-                  <span>Delete</span>
-                </button>
-              </div>
-            )
-          )}
-        </div>
-      </div>
-    ) : (
-      <div>not exit on todoList</div>
-    )
-  } else {
-    return <div></div>
-  }
-}
-
-const AddItem = () => {
-  const [item, setItem] = React.useState<string>()
-
-  const save = async () => {
-    const data = { name: item }
-    try {
-      await API.graphql(graphqlOperation(createTodo, { input: data }))
-    } catch (e) {
-      console.error(e)
-    }
-  }
+  const todoList = list ? list.data?.data.listTodos : []
 
   return (
-    <div className="input-section">
-      <div className="flex items-center w-full">
+    <div className="todo-container">
+      <div className="input-section flex items-center w-full">
         <input
           className="shadow appearance-none border rounded w-60 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-4"
           onChange={(e) => setItem(e.target.value)}
@@ -123,21 +75,51 @@ const AddItem = () => {
         />
         <button
           className="h-10 bg-yellow-500 hover:bg-yellow-400 text-black py-2 px-4 rounded shadow"
-          onClick={() => save()}
+          onClick={() => onCreateTodo()}
         >
           Save
         </button>
       </div>
+      {todoList.items && todoList.items.length > 0 ? (
+        <div className="list-section my-4">
+          <div style={{ listStyleType: 'none' }}>
+            {todoList.items.map(
+              (item: { name: string; id: number }, index: number) => (
+                <div key={index} className="w-full py-2 flex">
+                  {isEdit[index] != false ? (
+                    <button
+                      className="w-9/12 bg-gray-200 text-black py-2 px-4 rounded shadow"
+                      onClick={() => onToggleEdit(index)}
+                    >
+                      {item.name}
+                    </button>
+                  ) : (
+                    <input
+                      value={item.name}
+                      placeholder="Todo"
+                      className="w-9/12 text-black py-2 px-4 rounded shadow"
+                      onClick={() => onToggleEdit(index)}
+                    />
+                  )}
+                  <div className="empty w-1/12"></div>
+                  <button
+                    className="w-2/12 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-4 rounded shadow"
+                    onClick={() => {
+                      onDeleteTodo(item.id)
+                    }}
+                  >
+                    <span>Delete</span>
+                  </button>
+                </div>
+              )
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="text-gray-600 m-4 text-bold text-xl">No Todos</div>
+      )}
     </div>
   )
 }
 
-const Todo = () => {
-  return (
-    <div className="max-w-3xl">
-      <AddItem />
-      <ListItem />
-    </div>
-  )
-}
 export default Todo
