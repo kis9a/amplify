@@ -14,6 +14,7 @@ export interface GraphQLResult {
 
 const ListItem = () => {
   const [list, setList] = React.useState<GraphQLResult>()
+  const [isEdit, setIsEdit] = React.useState<boolean[]>([])
 
   const onDeleteTodo = async (id: number) => {
     const data = { id: id }
@@ -22,6 +23,14 @@ const ListItem = () => {
     } catch (e) {
       console.error(e)
     }
+  }
+
+  const toggleEdit = (index: number) => {
+    if (typeof isEdit[index] !== 'boolean') {
+      isEdit[index] = false
+    }
+    isEdit[index] = !isEdit[index]
+    setIsEdit(isEdit)
   }
 
   React.useEffect(() => {
@@ -44,9 +53,28 @@ const ListItem = () => {
           {todoList.items.map(
             (item: { name: string; id: number }, index: number) => (
               <div key={index} className="w-full py-2">
-                <button className="w-5/6 bg-gray-200 hover:bg-gray-100 text-black py-2 px-4 rounded shadow">
-                  {item.name}
-                </button>
+                {isEdit[index] ? (
+                  <button
+                    className="w-5/6 bg-gray-200 hover:bg-gray-100 text-black py-2 px-4 rounded shadow"
+                    onClick={() => toggleEdit(index)}
+                  >
+                    {item.name}
+                  </button>
+                ) : (
+                  <div>
+                    <input
+                      value={item.name}
+                      className="w-4/6 text-black py-2 px-4 rounded shadow"
+                      onClick={() => toggleEdit(index)}
+                    />
+                    <button
+                      className="w-5/6 bg-gray-200 hover:bg-gray-100 text-black py-2 px-4 rounded shadow"
+                      onClick={() => toggleEdit(index)}
+                    >
+                      {item.name}
+                    </button>
+                  </div>
+                )}
                 <button
                   className="w-1/6 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-4 rounded shadow"
                   onClick={() => {
