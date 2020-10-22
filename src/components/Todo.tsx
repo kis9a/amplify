@@ -33,17 +33,20 @@ const ListItem = () => {
     setIsEdit(isEdit)
   }
 
-  React.useEffect(() => {
-    const fetch = async () => {
-      try {
-        const result = await API.graphql(graphqlOperation(listTodos))
-        setList({ data: result })
-      } catch (e) {
-        console.error(e)
-      }
+  const getListTodos = async () => {
+    try {
+      const result = await API.graphql(graphqlOperation(listTodos))
+      setList({ data: result })
+    } catch (e) {
+      console.error(e)
     }
-    fetch()
-  }, [list])
+  }
+
+  React.useEffect(() => {
+    getListTodos()
+    // [list] is cause infinity loop
+    // [] useEffect is called when mounted & unmounted
+  }, [])
 
   if (list) {
     const todoList = list.data?.data.listTodos
