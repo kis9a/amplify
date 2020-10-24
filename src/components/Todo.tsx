@@ -38,12 +38,12 @@ const Todo = () => {
   }
 
   const onToggleEdit = (index: number) => {
-    if (typeof isEdit[index] !== 'boolean') {
-      isEdit[index] = false
+    const newIsEdit = isEdit.slice()
+    if (typeof newIsEdit[index] !== 'boolean') {
+      newIsEdit[index] = false
     }
-    isEdit[index] = !isEdit[index]
-    setIsEdit(isEdit)
-    getListTodos()
+    newIsEdit[index] = !newIsEdit[index]
+    setIsEdit(newIsEdit)
   }
 
   const getListTodos = async () => {
