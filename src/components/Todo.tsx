@@ -27,6 +27,10 @@ const Todo = () => {
     getListTodos()
   }
 
+  const onUpdateTodo = async () => {
+    //TODO update todo
+  }
+
   const onDeleteTodo = async (id: number) => {
     const data = { id: id }
     try {
@@ -74,7 +78,7 @@ const Todo = () => {
           placeholder="Todo"
         />
         <button
-          className="h-10 bg-yellow-500 hover:bg-yellow-400 text-black py-2 px-4 rounded shadow"
+          className="h-10 bg-yellow-500 hover:bg-yellow-400 text-gray-700 py-2 px-4 rounded shadow"
           onClick={() => onCreateTodo()}
         >
           Save
@@ -86,29 +90,81 @@ const Todo = () => {
             {todoList.items.map(
               (item: { name: string; id: number }, index: number) => (
                 <div key={index} className="w-full py-2 flex">
-                  {isEdit[index] != false ? (
-                    <button
-                      className="w-9/12 bg-gray-200 text-black py-2 px-4 rounded shadow"
-                      onClick={() => onToggleEdit(index)}
-                    >
-                      {item.name}
-                    </button>
+                  {isEdit[index] != true ? (
+                    <>
+                      <button className="w-9/12 mr-2 bg-gray-200 text-black py-2 px-4 rounded shadow">
+                        {item.name}
+                      </button>
+                      <button
+                        className="w-1/12 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-4 rounded shadow mr-2"
+                        onClick={() => onToggleEdit(index)}
+                      >
+                        <svg
+                          className="icon-edit text-gray-500"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                          />
+                        </svg>
+                      </button>
+                    </>
                   ) : (
-                    <input
-                      value={item.name}
-                      placeholder="Todo"
-                      className="w-9/12 text-black py-2 px-4 rounded shadow"
-                      onClick={() => onToggleEdit(index)}
-                    />
+                    <>
+                      <input
+                        value={item.name}
+                        placeholder="Todo"
+                        className="w-9/12 mr-2 text-black py-2 px-4 rounded shadow"
+                      />
+                      <button
+                        className="w-1/12 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-4 rounded shadow mr-2"
+                        onClick={() => {
+                          onUpdateTodo()
+                        }}
+                      >
+                        <svg
+                          className="icon-check text-gray-500"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </button>
+                    </>
                   )}
-                  <div className="empty w-1/12"></div>
                   <button
-                    className="w-2/12 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-4 rounded shadow"
+                    className="w-1/12 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-4 rounded shadow"
                     onClick={() => {
                       onDeleteTodo(item.id)
                     }}
                   >
-                    <span>Delete</span>
+                    <svg
+                      className="icon-trash text-gray-500"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
                   </button>
                 </div>
               )
