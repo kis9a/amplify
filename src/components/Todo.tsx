@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { API, graphqlOperation } from 'aws-amplify'
-import { createTodo, deleteTodo, updateTodo } from '../graphql/mutations'
 import { listTodos } from '../graphql/queries'
+import { createTodo, deleteTodo, updateTodo } from '../graphql/mutations'
+import { CreateTodoInput, UpdateTodoInput, DeleteTodoInput } from '../types/API'
 
 export interface GraphQLResult {
   data?: Record<string, any>
@@ -17,7 +18,7 @@ const Todo = () => {
   const [newTodoInput, setNewTodoInput] = useState<string>()
 
   const onCreateTodo = async () => {
-    const data = { name: newTodoInput }
+    const data: CreateTodoInput = { name: newTodoInput }
     try {
       await API.graphql(graphqlOperation(createTodo, { input: data }))
     } catch (e) {
@@ -27,7 +28,7 @@ const Todo = () => {
   }
 
   const onUpdateTodo = async (id: number, name: string) => {
-    const data = { id: id, name: name }
+    const data: UpdateTodoInput = { id: `${id}`, name: name }
     try {
       await API.graphql(graphqlOperation(updateTodo, { input: data }))
     } catch (e) {
@@ -38,7 +39,7 @@ const Todo = () => {
   }
 
   const onDeleteTodo = async (id: number) => {
-    const data = { id: id }
+    const data: DeleteTodoInput = { id: `${id}` }
     try {
       await API.graphql(graphqlOperation(deleteTodo, { input: data }))
     } catch (e) {
@@ -59,7 +60,7 @@ const Todo = () => {
     setIsEdit([...isEdit])
   }
 
-  const onEditTodo = async (
+  const onEditTodo = (
     event: React.ChangeEvent<HTMLInputElement>,
     id: number
   ) => {
@@ -145,6 +146,7 @@ const Todo = () => {
                           <input
                             value={item.name}
                             onChange={(e) => onEditTodo(e, item.id)}
+                            onBlur={() => onSetIsEdit(item.id, false)}
                             placeholder="Todo"
                             className="w-9/12 mr-2 text-black py-2 px-4 rounded shadow"
                           />
