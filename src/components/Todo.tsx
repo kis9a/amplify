@@ -50,19 +50,17 @@ const Todo = () => {
     setIsEdit(newIsEdit)
   }
 
-  const onEditInputChange = async (
+  const onEditTodo = async (
     event: React.ChangeEvent<HTMLInputElement>,
     id: number
   ) => {
-    if (list) {
-      list.data?.data.listTodos.items.forEach((item) => {
-        if (item) {
-          item.name = item.id === id ? event.currentTarget.value : item
+    if (list && list.data.data.listTodos.items) {
+      list.data.data.listTodos.items.map((item) => {
+        if (item && item.id === id) {
+          item.name = event.currentTarget.value
         }
       })
-      setList(list)
-      // TODO
-      // setList({ ...list })
+      setList({ ...list })
     }
   }
 
@@ -137,7 +135,7 @@ const Todo = () => {
                         <>
                           <input
                             value={item.name}
-                            onChange={(e) => onEditInputChange(e, item.id)}
+                            onChange={(e) => onEditTodo(e, item.id)}
                             placeholder="Todo"
                             className="w-9/12 mr-2 text-black py-2 px-4 rounded shadow"
                           />
