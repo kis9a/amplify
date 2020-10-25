@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { API, graphqlOperation } from 'aws-amplify'
-import { createTodo } from '../graphql/mutations'
+import { createTodo, deleteTodo, updateTodo } from '../graphql/mutations'
 import { listTodos } from '../graphql/queries'
-import { deleteTodo } from '../graphql/mutations'
 
 export interface GraphQLResult {
   data?: Record<string, any>
@@ -27,8 +26,15 @@ const Todo = () => {
     getListTodos()
   }
 
-  const onUpdateTodo = async () => {
-    //TODO update todo
+  const onUpdateTodo = async (id: number, name: string) => {
+    const data = { id: id, name: name }
+    try {
+      await API.graphql(graphqlOperation(updateTodo, { input: data }))
+    } catch (e) {
+      console.error(e)
+    }
+    await getListTodos()
+    onSetIsEdit(id, false)
   }
 
   const onDeleteTodo = async (id: number) => {
@@ -41,13 +47,16 @@ const Todo = () => {
     getListTodos()
   }
 
-  const onToggleEdit = (index: number) => {
-    const newIsEdit = [...isEdit]
-    if (typeof newIsEdit[index] !== 'boolean') {
-      newIsEdit[index] = false
+  const onSetIsEdit = (index: number, is?: boolean) => {
+    if (typeof isEdit[index] !== 'boolean') {
+      isEdit[index] = false
     }
-    newIsEdit[index] = !newIsEdit[index]
-    setIsEdit(newIsEdit)
+    if (typeof is === 'boolean') {
+      isEdit[index] = is
+    } else {
+      isEdit[index] = !isEdit[index]
+    }
+    setIsEdit([...isEdit])
   }
 
   const onEditTodo = async (
@@ -113,7 +122,7 @@ const Todo = () => {
                           </div>
                           <button
                             className="w-1/12 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2 text-center"
-                            onClick={() => onToggleEdit(index)}
+                            onClick={() => onSetIsEdit(index)}
                           >
                             <svg
                               className="text-gray-500 fill-current w-4 h-4 m-auto"
@@ -142,7 +151,7 @@ const Todo = () => {
                           <button
                             className="w-1/12 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2"
                             onClick={() => {
-                              onUpdateTodo()
+                              onUpdateTodo(item.id, item.name)
                             }}
                           >
                             <svg
