@@ -1,10 +1,10 @@
 {
-  "AppSyncApiName": "todolist",
+  "AppSyncApiName": "amplify",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
   "AuthCognitoUserPoolId": {
     "Fn::GetAtt": [
-      "authtodolistb44a4c6e",
+      "authamplifydac3dbce",
       "Outputs.UserPoolId"
     ]
   }

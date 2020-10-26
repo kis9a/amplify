@@ -1,6 +1,6 @@
 projects:
   todolist:
-    schemaPath: amplify/backend/api/todolist/build/schema.graphql
+    schemaPath: amplify/backend/api/amplify/build/schema.graphql
     includes:
       - src/graphql/**/*.ts
     excludes:
@@ -13,6 +13,17 @@ projects:
         region: ap-northeast-1
         apiId: null
         maxDepth: 2
+  amplify:
+    schemaPath: amplify/backend/api/amplify/build/schema.graphql
+    includes:
+      - src/graphql/**/*.js
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: javascript
+        generatedFileName: ''
+        docsFilePath: src/graphql
 extensions:
   amplify:
     version: 3

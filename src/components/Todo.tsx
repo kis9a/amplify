@@ -22,24 +22,29 @@ const Todo = () => {
 
   const onCreateTodo = async () => {
     const data: CreateTodoInput = { name: newTodoInput }
-    try {
-      await API.graphql(graphqlOperation(createTodo, { input: data }))
-    } catch (e) {
-      console.error(e)
-    } finally {
-      setNewTodoInput('')
-      await getTodoItems()
+    if (newTodoInput && newTodoInput.trim().length > 0) {
+      try {
+        await API.graphql(graphqlOperation(createTodo, { input: data }))
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setNewTodoInput('')
+        await getTodoItems()
+      }
     }
   }
 
   const onUpdateTodo = async (id: string, name: string) => {
     const data: UpdateTodoInput = { id: id, name: name }
-    try {
-      await API.graphql(graphqlOperation(updateTodo, { input: data }))
-    } catch (e) {
-      console.error(e)
+    if (name && name.trim().length > 0) {
+      try {
+        await API.graphql(graphqlOperation(updateTodo, { input: data }))
+      } catch (e) {
+        console.error(e)
+      } finally {
+        onSetIsEdit(id, false)
+      }
     }
-    onSetIsEdit(id, false)
   }
 
   const onDeleteTodo = async (id: string) => {
@@ -107,21 +112,42 @@ const Todo = () => {
 
   return (
     <div className="todo-container">
-      <div className="input-section flex items-center w-full">
+      <div className="input-section flex items-center w-11/12">
         <input
           autoFocus
-          className="shadow appearance-none border rounded w-60 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mr-4"
+          className="shadow appearance-none border rounded w-4/5 py-2 pl-3 pr-12 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
           value={newTodoInput || ''}
           onChange={(e) => setNewTodoInput(e.target.value)}
           id="username"
           type="text"
-          placeholder="Todo"
+          placeholder="Todo*"
+          maxLength={50}
         />
+        <span className="text-sm text-gray-300 relative bottom-0 right-12">
+          {newTodoInput ? (
+            <span>{newTodoInput.length}/50</span>
+          ) : (
+            <span>0/50</span>
+          )}
+        </span>
         <button
-          className="h-10 bg-yellow-500 hover:bg-yellow-400 text-gray-700 py-2 px-4 rounded shadow"
+          className="w-1/12 h-10 bg-yellow-500 text-gray-700 py-2 px-2 rounded shadow mr-2 text-center"
           onClick={() => onCreateTodo()}
         >
-          Save
+          <svg
+            className="text-gray-700 fill-current w-4 h-4 m-auto"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
+          </svg>
         </button>
       </div>
       {todoItems && todoItems.length > 0 ? (
@@ -133,7 +159,7 @@ const Todo = () => {
                   <div key={index} className="w-full py-2 flex">
                     {item.isEdit != true ? (
                       <>
-                        <div className="w-9/12 mr-2 bg-gray-200 text-black py-2 px-4 rounded shadow">
+                        <div className="w-9/12 mr-4 bg-gray-200 text-black py-2 px-4 rounded shadow">
                           {item.name}
                         </div>
                         <button
@@ -161,8 +187,9 @@ const Todo = () => {
                         <input
                           value={item.name}
                           onChange={(e) => onEditTodo(e, item.id)}
-                          placeholder="Todo"
-                          className="w-9/12 mr-2 text-black py-2 px-4 rounded shadow"
+                          placeholder="Edit Todo"
+                          className="w-9/12 mr-4 text-black py-2 px-4 rounded shadow pl-3 pr-12"
+                          maxLength={50}
                         />
                         <button
                           className="w-1/12 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2"

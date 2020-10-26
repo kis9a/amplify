@@ -1,6 +1,6 @@
 {
   "auth": {
-    "todolistb44a4c6e": {
+    "amplifydac3dbce": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -8,7 +8,7 @@
     }
   },
   "api": {
-    "todolist": {
+    "amplify": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
       "output": {
@@ -16,7 +16,7 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authtodolistb44a4c6e"
+              "userPoolId": "authamplifydac3dbce"
             }
           },
           "additionalAuthenticationProviders": []
