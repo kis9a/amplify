@@ -26,22 +26,16 @@
   "dependencies": {
     "@aws-amplify/ui-components": "^0.8.4",
     "@aws-amplify/ui-react": "^0.2.21",
-    "@reduxjs/toolkit": "^1.5.0",
-    "aws-amplify": "^3.0.20",
+    "@aws-amplify": "^3.0.20",
     "next": "^10.0.7",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-redux": "^7.2.2",
-    "redux": "^4.0.5",
-    "redux-logger": "^3.0.6"
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "@testing-library/react": "^10.0.1",
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.5",
     "@types/react": "^16.9.27",
-    "@types/react-redux": "^7.1.16",
-    "@types/redux-logger": "^3.0.8",
     "@typescript-eslint/eslint-plugin": "^2.25.0",
     "@typescript-eslint/parser": "^2.25.0",
     "autoprefixer": "^10.2.4",
