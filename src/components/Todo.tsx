@@ -13,7 +13,10 @@ import {
 interface TodoItem {
   id: string
   name: string
-  isEdit: boolean
+  // description?: string
+  isEditItemName?: boolean
+  // isEditDescription?: boolean
+  isOpenItemDetail?: boolean
 }
 
 const Todo = () => {
@@ -38,7 +41,10 @@ const Todo = () => {
 
         const newTodoItems = [
           ...todoItems,
-          { id: `${addedTodoId}`, name: newTodoInput, isEdit: false },
+          {
+            id: `${addedTodoId}`,
+            name: newTodoInput,
+          },
         ]
         setTodoItems(newTodoItems)
 
@@ -77,9 +83,9 @@ const Todo = () => {
     const newTodoItems = todoItems.map((item) => {
       if (item.id === id) {
         if (typeof is === 'boolean') {
-          item.isEdit = is
+          item.isEditItemName = is
         } else {
-          item.isEdit = !item.isEdit
+          item.isEditItemName = !item.isEditItemName
         }
       }
       return item
@@ -87,6 +93,26 @@ const Todo = () => {
     setTodoItems(newTodoItems)
   }
 
+  // const onSetIsOpenItemDetail = (id: string, is?: boolean) => {
+  //   const newTodoItems = todoItems.map((item) => {
+  //   if (typeof is === 'boolean') {
+  //   }
+  //   })
+  // }
+
+  const onSetIsOpenItemDetail = (id: string, is?: boolean) => {
+    const newTodoItems = todoItems.map((item) => {
+      if (item.id === id) {
+        if (typeof is === 'boolean') {
+          item.isOpenItemDetail = is
+        } else {
+          item.isOpenItemDetail = !item.isOpenItemDetail
+        }
+      }
+      return item
+    })
+    setTodoItems(newTodoItems)
+  }
   const onEditTodo = (
     event: React.ChangeEvent<HTMLInputElement>,
     id: string
@@ -110,7 +136,7 @@ const Todo = () => {
       // GraphQLResult and Observable<object> incorrect types for API.graphql
       // https://github.com/aws-amplify/amplify-js/issues/4257
       result.data.listTodos.items.forEach((item) =>
-        todoItems.push({ ...item, isEdit: false })
+        todoItems.push({ ...item, isEditItemName: false })
       )
       setTodoItems(todoItems)
     } catch (e) {
@@ -151,11 +177,11 @@ const Todo = () => {
             )}
           </span>
           <button
-            className="w-1/12 h-10 bg-yellow-500 text-gray-700 py-2 px-2 rounded shadow mr-2 text-center"
+            className="w-12 h-10 bg-yellow-500 text-gray-700 py-2 px-2 rounded shadow mr-2 text-center"
             onClick={() => onCreateTodo()}
           >
             <svg
-              className="text-gray-700 fill-current w-4 h-4 m-auto"
+              className="text-gray-500 w-6 h-6 m-auto"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -165,7 +191,7 @@ const Todo = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth={2}
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
               />
             </svg>
           </button>
@@ -176,86 +202,131 @@ const Todo = () => {
               {todoItems.map(
                 (item: TodoItem, index: number) =>
                   item && (
-                    <div key={index} className="w-full py-2 flex">
-                      {item.isEdit != true ? (
-                        <>
-                          <div className="w-9/12 mr-4 bg-gray-200 text-black py-2 px-4 rounded shadow">
-                            {item.name}
-                          </div>
-                          <button
-                            className="w-1/12 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2 text-center"
-                            onClick={() => onSetIsEdit(item.id)}
-                          >
-                            <svg
-                              className="text-gray-500 fill-current w-4 h-4 m-auto"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
+                    <>
+                      <div key={index} className="w-full py-2 flex">
+                        {item.isEditItemName != true ? (
+                          <>
+                            <div
+                              onClick={() => onSetIsOpenItemDetail(item.id)}
+                              className="flex justify-between w-9/12 mr-4 bg-gray-200 text-black py-2 px-2  rounded shadow"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                              />
-                            </svg>
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <input
-                            value={item.name}
-                            onChange={(e) => onEditTodo(e, item.id)}
-                            placeholder="Edit Todo"
-                            className="w-9/12 mr-4 text-black py-2 px-4 rounded shadow pl-3 pr-12"
-                            maxLength={50}
-                          />
-                          <button
-                            className="w-1/12 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2"
-                            onClick={() => {
-                              onUpdateTodo(item.id, item.name)
-                            }}
-                          >
-                            <svg
-                              className="text-gray-500 fill-current w-4 h-4 m-auto"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
+                              <p>{item.name}</p>
+                              <div>
+                                {item.isOpenItemDetail !== true ? (
+                                  <svg
+                                    className="text-gray-500 w-5 h-5 m-auto"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M19 9l-7 7-7-7"
+                                    />
+                                  </svg>
+                                ) : (
+                                  <svg
+                                    className="text-gray-500 w-5 h-5 m-auto"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M5 15l7-7 7 7"
+                                    />
+                                  </svg>
+                                )}
+                              </div>
+                            </div>
+                            <button
+                              className="w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2 text-center"
+                              onClick={() => onSetIsEdit(item.id)}
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 13l4 4L19 7"
-                              />
-                            </svg>
-                          </button>
-                        </>
-                      )}
-                      <button
-                        className="w-1/12 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow"
-                        onClick={() => {
-                          onDeleteTodo(item.id)
-                        }}
-                      >
-                        <svg
-                          className="text-gray-500 fill-current w-4 h-4 m-auto"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
+                              <svg
+                                className="text-gray-500 w-4 h-4 m-auto"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                                />
+                              </svg>
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              value={item.name}
+                              onChange={(e) => onEditTodo(e, item.id)}
+                              placeholder="Edit Todo"
+                              className="w-9/12 mr-4 text-black py-2 px-4 rounded shadow pl-3 pr-12"
+                              maxLength={50}
+                            />
+                            <button
+                              className="w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2"
+                              onClick={() => {
+                                onUpdateTodo(item.id, item.name)
+                              }}
+                            >
+                              <svg
+                                className="text-gray-500 w-4 h-4 m-auto"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M5 13l4 4L19 7"
+                                />
+                              </svg>
+                            </button>
+                          </>
+                        )}
+                        <button
+                          className="w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow"
+                          onClick={() => {
+                            onDeleteTodo(item.id)
+                          }}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                          />
-                        </svg>
-                      </button>
-                    </div>
+                          <svg
+                            className="text-gray-500  w-4 h-4 m-auto"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <div>
+                        {item.isOpenItemDetail && (
+                          <div>
+                            <p>Hello</p>
+                          </div>
+                        )}
+                      </div>
+                    </>
                   )
               )}
             </div>
