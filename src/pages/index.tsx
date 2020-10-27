@@ -7,19 +7,27 @@ import { GraphQLResult } from '@aws-amplify/api'
 import { API, graphqlOperation } from 'aws-amplify'
 import { listTodos } from '../graphql/queries'
 import { createTodo, deleteTodo, updateTodo } from '../graphql/mutations'
+import Loading from '../components/loading'
+import IconDown from '../components/icons/down'
+import IconUp from '../components/icons/up'
+import IconEdit from '../components/icons/edit'
+import IconDelete from '../components/icons/delete'
+import IconCheck from '../components/icons/check'
+import IconCreate from '../components/icons/create'
+import Input from '../components/input'
+import Textarea from '../components/textarea'
 import {
   CreateTodoInput,
   UpdateTodoInput,
   DeleteTodoInput,
-  ListTodosQuery,
+  ListTodosQuery
 } from '../types/API'
 
-interface TodoItem {
+type TodoItem = {
   id: string
   name: string
   description?: string
   isEditItemName?: boolean
-  // isEditDescription?: boolean
   isOpenItemDetail?: boolean
 }
 
@@ -31,18 +39,16 @@ const Todo = () => {
   const [newTodoNameInput, setNewTodoNameInput] = useState<string>('')
   const [
     newTodoDescriptionInput,
-    setNewTodoDescriptionInput,
+    setNewTodoDescriptionInput
   ] = useState<string>('')
-  const [isOpenDescriptionInput, setIsOpenDescriptionInput] = useState<boolean>(
-    true
-  )
+  const [isOpenItemDetail, setIsOpenItemDetail] = useState<boolean>(true)
   //}}}
 
   // functions {{{
   const onCreateTodo = async () => {
     const data: CreateTodoInput = {
       name: newTodoNameInput,
-      description: newTodoDescriptionInput,
+      description: newTodoDescriptionInput
     }
     if (newTodoNameInput && newTodoNameInput.trim().length > 0) {
       try {
@@ -61,8 +67,8 @@ const Todo = () => {
           {
             id: `${addedTodoId}`,
             name: newTodoNameInput,
-            description: newTodoDescriptionInput,
-          },
+            description: newTodoDescriptionInput
+          }
         ]
         setTodoItems(newTodoItems)
 
@@ -180,98 +186,40 @@ const Todo = () => {
         //{{{ section-input
         <div className="section-input">
           <div className="section-input-form flex items-center">
-            <input
-              autoFocus
-              className="input-new-todo-name shadow appearance-none border rounded w-full py-2 pl-3 pr-12 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+            <Input
               value={newTodoNameInput || ''}
-              onChange={(e) => setNewTodoNameInput(e.target.value)}
-              id="username"
-              type="text"
-              placeholder="Todo*"
-              maxLength={50}
+              onChange={(event) => setNewTodoNameInput(event.target.value)}
+              placeholder={'Todo*'}
+              autoFocus={true}
             />
-            {
-              // TODO: input string length counter
-              // <span className="text-sm text-gray-300 relative bottom-0 right-12">
-              //   {newTodoNameInput ? (
-              //     <span>{newTodoNameInput.length}/50</span>
-              //   ) : (
-              //     <span>0/50</span>
-              //   )}
-              // </span>
-            }
           </div>
           <div className="section-input-buttons my-2 flex justify-end">
             <div className="section-input-buttons-detail">
               <div
-                onClick={() =>
-                  setIsOpenDescriptionInput(!isOpenDescriptionInput)
-                }
                 className="button-detail flex flex-1 justify-center min-h-4 min-w-12 bg-gray-200 text-black py-1 px-4  rounded shadow mr-2"
+                onClick={() => setIsOpenItemDetail(!isOpenItemDetail)}
               >
-                {isOpenDescriptionInput !== true ? (
-                  <svg
-                    className="icon-down text-gray-500 w-4 h-4 m-auto"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    className="icon-up text-gray-500 w-4 h-4 m-auto"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 15l7-7 7 7"
-                    />
-                  </svg>
-                )}
+                {isOpenItemDetail !== true ? <IconDown /> : <IconUp />}
               </div>
             </div>
             <div
               className="section-input-buttons-create flex flex-1 justify-center bg-yellow-400 text-black py-1 px-2  rounded shadow"
               onClick={() => onCreateTodo()}
             >
-              <svg
-                className="icon-create text-gray-500 w-4 h-4 m-auto"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
-                />
-              </svg>
+              <IconCreate />
             </div>
           </div>
-          {isOpenDescriptionInput && (
+          {isOpenItemDetail && (
             <div className="section-input-detail-form">
-              <textarea
-                className="textarea-description shadow appearance-none border rounded w-full py-2 pl-3 pr-12 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+              <Textarea
                 value={newTodoDescriptionInput || ''}
-                onChange={(e) => setNewTodoDescriptionInput(e.target.value)}
+                onChange={(event) =>
+                  setNewTodoDescriptionInput(event.target.value)
+                }
+                placeholder={'Description?'}
                 rows={4}
-                id="username"
-                placeholder="Description?"
-                maxLength={500}
+                autoFocus={false}
+                maxLength={300}
               />
             </div>
           )}
@@ -281,22 +229,7 @@ const Todo = () => {
       {
         //{{{ section-todos
         isLoading ? (
-          <div className="section-loading animate-spin m-4">
-            <svg
-              className="icon-down text-gray-500 w-12 h-12 m-auto"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              />
-            </svg>
-          </div>
+          <Loading />
         ) : (
           <div className="section-todoitems my-4">
             {todoItems && todoItems.length > 0 ? (
@@ -306,103 +239,58 @@ const Todo = () => {
                     item && (
                       <div className="section-todoitem" key={index}>
                         <div className="section-todoitem-header w-full py-2 flex">
-                          {item.isEditItemName != true ? (
-                            <>
-                              <div
-                                onClick={() => onSetIsOpenItemDetail(item.id)}
-                                className="flex-1 flex items-center justify-between mr-4 bg-gray-200 text-black py-2 px-2  rounded shadow"
-                              >
-                                <p className="section-todoitem-header-name">
-                                  {item.name}
-                                </p>
-                                <div className="section-todoitem-header-button-toggler">
-                                  {item.isOpenItemDetail !== true ? (
-                                    <svg
-                                      className="icon-down text-gray-500 w-4 h-4 m-auto"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M19 9l-7 7-7-7"
-                                      />
-                                    </svg>
-                                  ) : (
-                                    <svg
-                                      className="icon-up text-gray-500 w-4 h-4 m-auto"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M5 15l7-7 7 7"
-                                      />
-                                    </svg>
-                                  )}
-                                </div>
+                          {item.isEditItemName !== true ? (
+                            <div
+                              onClick={() => onSetIsOpenItemDetail(item.id)}
+                              className="flex-1 flex items-center justify-between mr-4 bg-gray-200 text-black py-2 px-2  rounded shadow"
+                            >
+                              <p className="section-todoitem-header-name">
+                                {item.name}
+                              </p>
+                              <div className="section-todoitem-header-button-toggler">
+                                {item.isOpenItemDetail !== true ? (
+                                  <IconDown />
+                                ) : (
+                                  <IconUp />
+                                )}
                               </div>
-                              <div className="section-todoitem-header-button-edit">
+                            </div>
+                          ) : (
+                            <div className="mr-4 flex-1">
+                              <Input
+                                value={item.name || ''}
+                                onChange={(event) =>
+                                  setNewTodoNameInput(event.target.value)
+                                }
+                                placeholder={'Edit Todo*'}
+                                maxLength={50}
+                                autoFocus={true}
+                              />
+                            </div>
+                          )}
+
+                          {
+                            <div className="section-todoitem-header-button-edit">
+                              {item.isEditItemName !== true ? (
                                 <button
                                   className="button-edit button-edit w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2 text-center"
                                   onClick={() => onSetIsEdit(item.id)}
                                 >
-                                  <svg
-                                    className="icon-edit text-gray-500 w-4 h-4 m-auto"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                    />
-                                  </svg>
+                                  <IconEdit />
                                 </button>
-                              </div>
-                            </>
-                          ) : (
-                            <div className="section-todoitem-header-button-edited">
-                              <input
-                                value={item.name}
-                                onChange={(e) => onEditTodo(e, item.id)}
-                                placeholder="Edit Todo"
-                                className="input-update mr-4 text-black py-2 px-4 rounded shadow pl-3 pr-12"
-                                maxLength={50}
-                              />
-                              <button
-                                className="button-update w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2"
-                                onClick={() => {
-                                  onUpdateTodo(item.id, item.name)
-                                }}
-                              >
-                                <svg
-                                  className="icon-check text-gray-500 w-4 h-4 m-auto"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
+                              ) : (
+                                <button
+                                  className="button-update w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2"
+                                  onClick={() => {
+                                    onUpdateTodo(item.id, item.name)
+                                  }}
                                 >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M5 13l4 4L19 7"
-                                  />
-                                </svg>
-                              </button>
+                                  <IconCheck />
+                                </button>
+                              )}
                             </div>
-                          )}
+                          }
+
                           <div className="section-todoitem-header-button-delete">
                             <button
                               className="button-delete w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow"
@@ -410,20 +298,7 @@ const Todo = () => {
                                 onDeleteTodo(item.id)
                               }}
                             >
-                              <svg
-                                className="icon-delete text-gray-500  w-4 h-4 m-auto"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                />
-                              </svg>
+                              <IconDelete />
                             </button>
                           </div>
                         </div>
