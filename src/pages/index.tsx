@@ -16,11 +16,12 @@ import IconCheck from '../components/icons/check'
 import IconCreate from '../components/icons/create'
 import Input from '../components/input'
 import Textarea from '../components/textarea'
+import NoItem from '../components/noItem'
 import {
   CreateTodoInput,
   UpdateTodoInput,
   DeleteTodoInput,
-  ListTodosQuery
+  ListTodosQuery,
 } from '../types/API'
 
 type TodoItem = {
@@ -39,16 +40,16 @@ const Todo = () => {
   const [newTodoNameInput, setNewTodoNameInput] = useState<string>('')
   const [
     newTodoDescriptionInput,
-    setNewTodoDescriptionInput
+    setNewTodoDescriptionInput,
   ] = useState<string>('')
-  const [isOpenItemDetail, setIsOpenItemDetail] = useState<boolean>(true)
+  const [isOpenItemDetail, setIsOpenItemDetail] = useState<boolean>(false)
   //}}}
 
   // functions {{{
   const onCreateTodo = async () => {
     const data: CreateTodoInput = {
       name: newTodoNameInput,
-      description: newTodoDescriptionInput
+      description: newTodoDescriptionInput,
     }
     if (newTodoNameInput && newTodoNameInput.trim().length > 0) {
       try {
@@ -67,8 +68,8 @@ const Todo = () => {
           {
             id: `${addedTodoId}`,
             name: newTodoNameInput,
-            description: newTodoDescriptionInput
-          }
+            description: newTodoDescriptionInput,
+          },
         ]
         setTodoItems(newTodoItems)
 
@@ -137,13 +138,27 @@ const Todo = () => {
     })
     setTodoItems(newTodoItems)
   }
-  const onEditTodo = (
+
+  const onEditTodoName = (
     event: React.ChangeEvent<HTMLInputElement>,
     id: string
   ) => {
     const newTodoItems = todoItems.map((item) => {
       if (item && item.id === id) {
         item.name = event.currentTarget.value
+      }
+      return item
+    })
+    setTodoItems(newTodoItems)
+  }
+
+  const onEditTodoDescription = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+    id: string
+  ) => {
+    const newTodoItems = todoItems.map((item) => {
+      if (item && item.id === id) {
+        item.description = event.currentTarget.value
       }
       return item
     })
@@ -166,6 +181,7 @@ const Todo = () => {
     } catch (e) {
       console.error(e)
     } finally {
+      // prevent flickering
       setTimeout(() => {
         setIsLoading(false)
       }, 1000)
@@ -239,37 +255,41 @@ const Todo = () => {
                     item && (
                       <div className="section-todoitem" key={index}>
                         <div className="section-todoitem-header w-full py-2 flex">
-                          {item.isEditItemName !== true ? (
-                            <div
-                              onClick={() => onSetIsOpenItemDetail(item.id)}
-                              className="flex-1 flex items-center justify-between mr-4 bg-gray-200 text-black py-2 px-2  rounded shadow"
-                            >
-                              <p className="section-todoitem-header-name">
-                                {item.name}
-                              </p>
-                              <div className="section-todoitem-header-button-toggler">
-                                {item.isOpenItemDetail !== true ? (
-                                  <IconDown />
-                                ) : (
-                                  <IconUp />
-                                )}
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="mr-4 flex-1">
-                              <Input
-                                value={item.name || ''}
-                                onChange={(event) =>
-                                  setNewTodoNameInput(event.target.value)
-                                }
-                                placeholder={'Edit Todo*'}
-                                maxLength={50}
-                                autoFocus={true}
-                              />
-                            </div>
-                          )}
-
                           {
+                            // section-todoitem-header{{{
+                            item.isEditItemName !== true ? (
+                              <div
+                                onClick={() => onSetIsOpenItemDetail(item.id)}
+                                className="flex-1 flex items-center justify-between mr-4 bg-gray-200 text-black py-2 px-2  rounded shadow"
+                              >
+                                <p className="section-todoitem-header-name">
+                                  {item.name}
+                                </p>
+                                <div className="section-todoitem-header-button-toggler">
+                                  {item.isOpenItemDetail !== true ? (
+                                    <IconDown />
+                                  ) : (
+                                    <IconUp />
+                                  )}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="mr-4 flex-1">
+                                <Input
+                                  value={item.name || ''}
+                                  onChange={(event) =>
+                                    onEditTodoName(event, item.id)
+                                  }
+                                  placeholder={'Edit Todo*'}
+                                  maxLength={50}
+                                  autoFocus={true}
+                                />
+                              </div>
+                            )
+                            //}}}
+                          }
+                          {
+                            // section-todoitem-header-button-edit{{{
                             <div className="section-todoitem-header-button-edit">
                               {item.isEditItemName !== true ? (
                                 <button
@@ -289,26 +309,54 @@ const Todo = () => {
                                 </button>
                               )}
                             </div>
+                            //}}}
                           }
-
-                          <div className="section-todoitem-header-button-delete">
-                            <button
-                              className="button-delete w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow"
-                              onClick={() => {
-                                onDeleteTodo(item.id)
-                              }}
-                            >
-                              <IconDelete />
-                            </button>
-                          </div>
+                          {
+                            // section-todoitem-header-button-delete{{{
+                            <div className="section-todoitem-header-button-delete">
+                              <button
+                                className="button-delete w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow"
+                                onClick={() => {
+                                  onDeleteTodo(item.id)
+                                }}
+                              >
+                                <IconDelete />
+                              </button>
+                            </div>
+                            //}}}
+                          }
                         </div>
                         <div className="section-todoitem-detail">
                           <div className="section-todoitem-detail-description">
-                            {item.isOpenItemDetail && (
-                              <div>
-                                <p>{item.description || ''}</p>
-                              </div>
-                            )}
+                            {
+                              item.isOpenItemDetail &&
+                                // section-todoitem-detail-edit {{{
+                                (item.isEditItemName !== true ? (
+                                  <p className="section-todoitem-header-name bg-gray-200 text-black py-2 px-2  rounded shadow">
+                                    {item.description ? (
+                                      <div>{item.description}</div>
+                                    ) : (
+                                      <div className="text-sm text-gray-400">
+                                        Description?
+                                      </div>
+                                    )}
+                                  </p>
+                                ) : (
+                                  <div className="mr-4 flex-1">
+                                    <Textarea
+                                      value={item.description || ''}
+                                      onChange={(event) =>
+                                        onEditTodoDescription(event, item.id)
+                                      }
+                                      placeholder={'Description?'}
+                                      rows={4}
+                                      autoFocus={false}
+                                      maxLength={300}
+                                    />
+                                  </div>
+                                ))
+                              //}}}
+                            }
                           </div>
                         </div>
                       </div>
@@ -316,9 +364,7 @@ const Todo = () => {
                 )}
               </div>
             ) : (
-              <div className="section-no-todoitems-container text-gray-600 m-4 text-bold text-xl">
-                No Todo Items
-              </div>
+              <NoItem message="No todo items" />
             )}
           </div>
         )

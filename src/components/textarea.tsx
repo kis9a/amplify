@@ -15,7 +15,7 @@ const Textarea: FC<TextareaProps> = ({
   rows,
   placeholder,
   maxLength,
-  autoFocus
+  autoFocus,
 }) => {
   return (
     <textarea

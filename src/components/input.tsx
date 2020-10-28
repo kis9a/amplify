@@ -13,7 +13,7 @@ const Input: FC<InputProps> = ({
   onChange,
   placeholder,
   maxLength,
-  autoFocus
+  autoFocus,
 }) => {
   return (
     <input
