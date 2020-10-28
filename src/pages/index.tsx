@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import awsExports from '../aws-exports'
 import Amplify from 'aws-amplify'
 import { AmplifyAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
@@ -188,7 +188,7 @@ const Todo = () => {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     getTodoItems()
     // [list] is cause infinity loop
     // [] useEffect is called when mounted & unmounted
