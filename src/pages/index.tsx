@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
+import Amplify from '@aws-amplify/core'
+import { Auth } from '@aws-amplify/auth'
 import awsExports from '../aws-exports'
-import Amplify from 'aws-amplify'
 import { AmplifyAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
-import { GraphQLResult } from '@aws-amplify/api'
 import { API, graphqlOperation } from 'aws-amplify'
+import { GraphQLResult } from '@aws-amplify/api'
 import { listTodos } from '../graphql/queries'
 import { createTodo, deleteTodo, updateTodo } from '../graphql/mutations'
 import Loading from '../components/loading'
@@ -21,7 +22,7 @@ import {
   CreateTodoInput,
   UpdateTodoInput,
   DeleteTodoInput,
-  ListTodosQuery,
+  ListTodosQuery
 } from '../types/API'
 
 type TodoItem = {
@@ -40,7 +41,7 @@ const Todo = () => {
   const [newTodoNameInput, setNewTodoNameInput] = useState<string>('')
   const [
     newTodoDescriptionInput,
-    setNewTodoDescriptionInput,
+    setNewTodoDescriptionInput
   ] = useState<string>('')
   const [isOpenItemDetail, setIsOpenItemDetail] = useState<boolean>(false)
   //}}}
@@ -49,7 +50,7 @@ const Todo = () => {
   const onCreateTodo = async () => {
     const data: CreateTodoInput = {
       name: newTodoNameInput,
-      description: newTodoDescriptionInput,
+      description: newTodoDescriptionInput
     }
     if (newTodoNameInput && newTodoNameInput.trim().length > 0) {
       try {
@@ -68,8 +69,8 @@ const Todo = () => {
           {
             id: `${addedTodoId}`,
             name: newTodoNameInput,
-            description: newTodoDescriptionInput,
-          },
+            description: newTodoDescriptionInput
+          }
         ]
         setTodoItems(newTodoItems)
 
@@ -375,6 +376,7 @@ const Todo = () => {
 }
 
 Amplify.configure(awsExports)
+Auth.configure(awsExports)
 
 function Index() {
   const [authState, setAuthState] = React.useState(null)
