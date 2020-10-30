@@ -22,7 +22,7 @@ import {
   CreateTodoInput,
   UpdateTodoInput,
   DeleteTodoInput,
-  ListTodosQuery
+  ListTodosQuery,
 } from '../types/API'
 
 type TodoItem = {
@@ -31,6 +31,8 @@ type TodoItem = {
   description?: string
   isEditItemName?: boolean
   isOpenItemDetail?: boolean
+  createdAt?: string
+  updatedAt?: string
 }
 
 const Todo = () => {
@@ -41,7 +43,7 @@ const Todo = () => {
   const [newTodoNameInput, setNewTodoNameInput] = useState<string>('')
   const [
     newTodoDescriptionInput,
-    setNewTodoDescriptionInput
+    setNewTodoDescriptionInput,
   ] = useState<string>('')
   const [isOpenItemDetail, setIsOpenItemDetail] = useState<boolean>(false)
   //}}}
@@ -50,7 +52,7 @@ const Todo = () => {
   const onCreateTodo = async () => {
     const data: CreateTodoInput = {
       name: newTodoNameInput,
-      description: newTodoDescriptionInput
+      description: newTodoDescriptionInput,
     }
     if (newTodoNameInput && newTodoNameInput.trim().length > 0) {
       try {
@@ -59,6 +61,7 @@ const Todo = () => {
         console.error(e)
       } finally {
         setNewTodoNameInput('')
+        setNewTodoDescriptionInput('')
 
         // await getTodoItems()
         // when onCreateTodo push new todo but no fetch new todolist \
@@ -69,8 +72,10 @@ const Todo = () => {
           {
             id: `${addedTodoId}`,
             name: newTodoNameInput,
-            description: newTodoDescriptionInput
-          }
+            description: newTodoDescriptionInput,
+            createdAt: `${new Date()}`,
+            updateAt: `${new Date()}`,
+          },
         ]
         setTodoItems(newTodoItems)
 
@@ -89,6 +94,13 @@ const Todo = () => {
         console.error(e)
       } finally {
         onSetIsEdit(id, false)
+        const newTodoItems = todoItems.map((item) => {
+          if (item.id === id) {
+            item.updatedAt = `${new Date()}`
+          }
+          return item
+        })
+        setTodoItems(newTodoItems)
       }
     }
   }
@@ -187,6 +199,13 @@ const Todo = () => {
         setIsLoading(false)
       }, 1000)
     }
+  }
+
+  const formatDate = (dt: Date) => {
+    const y = dt.getFullYear()
+    const m = ('00' + (dt.getMonth() + 1)).slice(-2)
+    const d = ('00' + dt.getDate()).slice(-2)
+    return y + '-' + m + '-' + d
   }
 
   useEffect(() => {
@@ -330,32 +349,53 @@ const Todo = () => {
                         <div className="section-todoitem-detail">
                           <div className="section-todoitem-detail-description">
                             {
-                              item.isOpenItemDetail &&
+                              item.isOpenItemDetail && (
                                 // section-todoitem-detail-edit {{{
-                                (item.isEditItemName !== true ? (
-                                  <p className="section-todoitem-header-name bg-gray-200 text-black py-2 px-2  rounded shadow">
-                                    {item.description ? (
-                                      <div>{item.description}</div>
-                                    ) : (
-                                      <div className="text-sm text-gray-400">
-                                        Description?
-                                      </div>
-                                    )}
-                                  </p>
-                                ) : (
-                                  <div className="mr-4 flex-1">
-                                    <Textarea
-                                      value={item.description || ''}
-                                      onChange={(event) =>
-                                        onEditTodoDescription(event, item.id)
-                                      }
-                                      placeholder={'Description?'}
-                                      rows={4}
-                                      autoFocus={false}
-                                      maxLength={300}
-                                    />
+                                <div className="section-todoitem-details">
+                                  <div className="seciton-todoitem-details-meta">
+                                    <div className="section-todoitem-detail-createdAt flex bg-gray-200 text-gray-600 text-sm py-0.5 px-2 rounded shadow">
+                                      <span className="text-gray-700">
+                                        CREATED:&nbsp;
+                                      </span>
+                                      {formatDate(new Date(item.createdAt))}
+                                    </div>
+                                    <div className="section-todoitem-detail-updateAt flex bg-gray-200 text-gray-600 text-sm py-0.5 px-2 rounded shadow">
+                                      <span className="text-gray-700">
+                                        UPDATED:&nbsp;
+                                      </span>
+                                      {formatDate(new Date(item.updatedAt))}
+                                    </div>
                                   </div>
-                                ))
+                                  {item.isEditItemName !== true ? (
+                                    <div className="section-todoitem-detail-description bg-gray-200 text-gray-600  text-sm py-2 px-2  rounded shadow">
+                                      <span className="text-gray-700">
+                                        DESCRIPTION:&nbsp;
+                                      </span>
+                                      {item.description ? (
+                                        <div>{item.description}</div>
+                                      ) : (
+                                        <div className="text-sm text-gray-400">
+                                          Description?
+                                        </div>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    <div className="mr-4 flex-1">
+                                      <Textarea
+                                        value={item.description || ''}
+                                        onChange={(event) =>
+                                          onEditTodoDescription(event, item.id)
+                                        }
+                                        placeholder={'Description?'}
+                                        rows={4}
+                                        autoFocus={false}
+                                        maxLength={300}
+                                      />
+                                    </div>
+                                  )}
+                                </div>
+                              )
+
                               //}}}
                             }
                           </div>
