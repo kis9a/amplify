@@ -18,11 +18,12 @@ import IconCreate from '../components/icons/create'
 import Input from '../components/input'
 import Textarea from '../components/textarea'
 import NoItem from '../components/noItem'
+import DateItem from '../components/dateItem'
 import {
   CreateTodoInput,
   UpdateTodoInput,
   DeleteTodoInput,
-  ListTodosQuery,
+  ListTodosQuery
 } from '../types/API'
 
 type TodoItem = {
@@ -43,7 +44,7 @@ const Todo = () => {
   const [newTodoNameInput, setNewTodoNameInput] = useState<string>('')
   const [
     newTodoDescriptionInput,
-    setNewTodoDescriptionInput,
+    setNewTodoDescriptionInput
   ] = useState<string>('')
   const [isOpenItemDetail, setIsOpenItemDetail] = useState<boolean>(false)
   //}}}
@@ -52,7 +53,7 @@ const Todo = () => {
   const onCreateTodo = async () => {
     const data: CreateTodoInput = {
       name: newTodoNameInput,
-      description: newTodoDescriptionInput,
+      description: newTodoDescriptionInput
     }
     if (newTodoNameInput && newTodoNameInput.trim().length > 0) {
       try {
@@ -74,8 +75,8 @@ const Todo = () => {
             name: newTodoNameInput,
             description: newTodoDescriptionInput,
             createdAt: `${new Date()}`,
-            updateAt: `${new Date()}`,
-          },
+            updateAt: `${new Date()}`
+          }
         ]
         setTodoItems(newTodoItems)
 
@@ -199,13 +200,6 @@ const Todo = () => {
         setIsLoading(false)
       }, 1000)
     }
-  }
-
-  const formatDate = (dt: Date) => {
-    const y = dt.getFullYear()
-    const m = ('00' + (dt.getMonth() + 1)).slice(-2)
-    const d = ('00' + dt.getDate()).slice(-2)
-    return y + '-' + m + '-' + d
   }
 
   useEffect(() => {
@@ -357,13 +351,13 @@ const Todo = () => {
                                       <span className="text-gray-700">
                                         CREATED:&nbsp;
                                       </span>
-                                      {formatDate(new Date(item.createdAt))}
+                                      <DateItem date={item.createdAt} />
                                     </div>
                                     <div className="section-todoitem-detail-updateAt flex bg-gray-200 text-gray-600 text-sm py-0.5 px-2 rounded shadow">
                                       <span className="text-gray-700">
                                         UPDATED:&nbsp;
                                       </span>
-                                      {formatDate(new Date(item.updatedAt))}
+                                      <DateItem date={item.updatedAt} />
                                     </div>
                                   </div>
                                   {item.isEditItemName !== true ? (
@@ -380,7 +374,7 @@ const Todo = () => {
                                       )}
                                     </div>
                                   ) : (
-                                    <div className="mr-4 flex-1">
+                                    <div className="flex-1">
                                       <Textarea
                                         value={item.description || ''}
                                         onChange={(event) =>
