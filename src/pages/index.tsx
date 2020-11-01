@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Amplify from '@aws-amplify/core'
-import { Auth } from '@aws-amplify/auth'
+// import { Auth } from '@aws-amplify/auth'
 import awsExports from '../aws-exports'
 import { AmplifyAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
@@ -19,11 +19,12 @@ import Input from '../components/input'
 import Textarea from '../components/textarea'
 import NoItem from '../components/noItem'
 import DateItem from '../components/dateItem'
+import Layout from '../components/layout'
 import {
   CreateTodoInput,
   UpdateTodoInput,
   DeleteTodoInput,
-  ListTodosQuery
+  ListTodosQuery,
 } from '../types/API'
 
 type TodoItem = {
@@ -44,7 +45,7 @@ const Todo = () => {
   const [newTodoNameInput, setNewTodoNameInput] = useState<string>('')
   const [
     newTodoDescriptionInput,
-    setNewTodoDescriptionInput
+    setNewTodoDescriptionInput,
   ] = useState<string>('')
   const [isOpenItemDetail, setIsOpenItemDetail] = useState<boolean>(false)
   //}}}
@@ -53,7 +54,7 @@ const Todo = () => {
   const onCreateTodo = async () => {
     const data: CreateTodoInput = {
       name: newTodoNameInput,
-      description: newTodoDescriptionInput
+      description: newTodoDescriptionInput,
     }
     if (newTodoNameInput && newTodoNameInput.trim().length > 0) {
       try {
@@ -75,8 +76,8 @@ const Todo = () => {
             name: newTodoNameInput,
             description: newTodoDescriptionInput,
             createdAt: `${new Date()}`,
-            updateAt: `${new Date()}`
-          }
+            updateAt: `${new Date()}`,
+          },
         ]
         setTodoItems(newTodoItems)
 
@@ -131,13 +132,6 @@ const Todo = () => {
     })
     setTodoItems(newTodoItems)
   }
-
-  // const onSetIsOpenItemDetail = (id: string, is?: boolean) => {
-  //   const newTodoItems = todoItems.map((item) => {
-  //   if (typeof is === 'boolean') {
-  //   }
-  //   })
-  // }
 
   const onSetIsOpenItemDetail = (id: string, is?: boolean) => {
     const newTodoItems = todoItems.map((item) => {
@@ -204,213 +198,216 @@ const Todo = () => {
 
   useEffect(() => {
     getTodoItems()
-    // [list] is cause infinity loop
-    // [] useEffect is called when mounted & unmounted
-    // j
+    // [list] is cause infinity loop. [] useEffect is called when mounted & unmounted
   }, [])
   //}}}
 
   return (
-    <div className="todo-container max-w-screen-md mx-auto">
-      {
-        //{{{ section-input
-        <div className="section-input">
-          <div className="section-input-form flex items-center">
-            <Input
-              value={newTodoNameInput || ''}
-              onChange={(event) => setNewTodoNameInput(event.target.value)}
-              placeholder={'Todo*'}
-              autoFocus={true}
-            />
-          </div>
-          <div className="section-input-buttons my-2 flex justify-end">
-            <div className="section-input-buttons-detail">
-              <div
-                className="button-detail flex flex-1 justify-center min-h-4 min-w-12 bg-gray-200 text-black py-1 px-4  rounded shadow mr-2"
-                onClick={() => setIsOpenItemDetail(!isOpenItemDetail)}
-              >
-                {isOpenItemDetail !== true ? <IconDown /> : <IconUp />}
-              </div>
-            </div>
-            <div
-              className="section-input-buttons-create flex flex-1 justify-center bg-yellow-400 text-black py-1 px-2  rounded shadow"
-              onClick={() => onCreateTodo()}
-            >
-              <IconCreate />
-            </div>
-          </div>
-          {isOpenItemDetail && (
-            <div className="section-input-detail-form">
-              <Textarea
-                value={newTodoDescriptionInput || ''}
-                onChange={(event) =>
-                  setNewTodoDescriptionInput(event.target.value)
-                }
-                placeholder={'Description?'}
-                rows={4}
-                autoFocus={false}
-                maxLength={300}
+    <Layout>
+      <div className="todo-container max-w-screen-md mx-auto">
+        {
+          //{{{ section-input
+          <div className="section-input">
+            <div className="section-input-form flex items-center">
+              <Input
+                value={newTodoNameInput || ''}
+                onChange={(event) => setNewTodoNameInput(event.target.value)}
+                placeholder={'Todo*'}
+                autoFocus={true}
               />
             </div>
-          )}
-        </div>
-        //}}}
-      }
-      {
-        //{{{ section-todos
-        isLoading ? (
-          <Loading />
-        ) : (
-          <div className="section-todoitems my-4">
-            {todoItems && todoItems.length > 0 ? (
-              <div className="section-todoitems-container my-4">
-                {todoItems.map(
-                  (item: TodoItem, index: number) =>
-                    item && (
-                      <div className="section-todoitem" key={index}>
-                        <div className="section-todoitem-header w-full py-2 flex">
-                          {
-                            // section-todoitem-header{{{
-                            item.isEditItemName !== true ? (
-                              <div
-                                onClick={() => onSetIsOpenItemDetail(item.id)}
-                                className="flex-1 flex items-center justify-between mr-4 bg-gray-200 text-black py-2 px-2  rounded shadow"
-                              >
-                                <p className="section-todoitem-header-name">
-                                  {item.name}
-                                </p>
-                                <div className="section-todoitem-header-button-toggler">
-                                  {item.isOpenItemDetail !== true ? (
-                                    <IconDown />
-                                  ) : (
-                                    <IconUp />
-                                  )}
-                                </div>
-                              </div>
-                            ) : (
-                              <div className="mr-4 flex-1">
-                                <Input
-                                  value={item.name || ''}
-                                  onChange={(event) =>
-                                    onEditTodoName(event, item.id)
-                                  }
-                                  placeholder={'Edit Todo*'}
-                                  maxLength={50}
-                                  autoFocus={true}
-                                />
-                              </div>
-                            )
-                            //}}}
-                          }
-                          {
-                            // section-todoitem-header-button-edit{{{
-                            <div className="section-todoitem-header-button-edit">
-                              {item.isEditItemName !== true ? (
-                                <button
-                                  className="button-edit button-edit w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2 text-center"
-                                  onClick={() => onSetIsEdit(item.id)}
-                                >
-                                  <IconEdit />
-                                </button>
-                              ) : (
-                                <button
-                                  className="button-update w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2"
-                                  onClick={() => {
-                                    onUpdateTodo(item.id, item.name)
-                                  }}
-                                >
-                                  <IconCheck />
-                                </button>
-                              )}
-                            </div>
-                            //}}}
-                          }
-                          {
-                            // section-todoitem-header-button-delete{{{
-                            <div className="section-todoitem-header-button-delete">
-                              <button
-                                className="button-delete w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow"
-                                onClick={() => {
-                                  onDeleteTodo(item.id)
-                                }}
-                              >
-                                <IconDelete />
-                              </button>
-                            </div>
-                            //}}}
-                          }
-                        </div>
-                        <div className="section-todoitem-detail">
-                          <div className="section-todoitem-detail-description">
+            <div className="section-input-buttons my-2 flex justify-end">
+              <div className="section-input-buttons-detail">
+                <div
+                  className="button-detail flex flex-1 justify-center min-h-4 min-w-12 bg-gray-200 text-black py-1 px-4  rounded shadow mr-2"
+                  onClick={() => setIsOpenItemDetail(!isOpenItemDetail)}
+                >
+                  {isOpenItemDetail !== true ? <IconDown /> : <IconUp />}
+                </div>
+              </div>
+              <div
+                className="section-input-buttons-create flex flex-1 justify-center bg-yellow-400 text-black py-1 px-2  rounded shadow"
+                onClick={() => onCreateTodo()}
+              >
+                <IconCreate />
+              </div>
+            </div>
+            {isOpenItemDetail && (
+              <div className="section-input-detail-form">
+                <Textarea
+                  value={newTodoDescriptionInput || ''}
+                  onChange={(event) =>
+                    setNewTodoDescriptionInput(event.target.value)
+                  }
+                  placeholder={'Description?'}
+                  rows={4}
+                  autoFocus={false}
+                  maxLength={300}
+                />
+              </div>
+            )}
+          </div>
+          //}}}
+        }
+        {
+          //{{{ section-todos
+          isLoading ? (
+            <Loading />
+          ) : (
+            <div className="section-todoitems my-4">
+              {todoItems && todoItems.length > 0 ? (
+                <div className="section-todoitems-container my-4">
+                  {todoItems.map(
+                    (item: TodoItem, index: number) =>
+                      item && (
+                        <div className="section-todoitem" key={index}>
+                          <div className="section-todoitem-header w-full py-2 flex">
                             {
-                              item.isOpenItemDetail && (
-                                // section-todoitem-detail-edit {{{
-                                <div className="section-todoitem-details">
-                                  <div className="seciton-todoitem-details-meta">
-                                    <div className="section-todoitem-detail-createdAt flex bg-gray-200 text-gray-600 text-sm py-0.5 px-2 rounded shadow">
-                                      <span className="text-gray-700">
-                                        CREATED:&nbsp;
-                                      </span>
-                                      <DateItem date={item.createdAt} />
-                                    </div>
-                                    <div className="section-todoitem-detail-updateAt flex bg-gray-200 text-gray-600 text-sm py-0.5 px-2 rounded shadow">
-                                      <span className="text-gray-700">
-                                        UPDATED:&nbsp;
-                                      </span>
-                                      <DateItem date={item.updatedAt} />
-                                    </div>
+                              // section-todoitem-header{{{
+                              item.isEditItemName !== true ? (
+                                <div
+                                  onClick={() => onSetIsOpenItemDetail(item.id)}
+                                  className="flex-1 flex items-center justify-between mr-4 bg-gray-200 text-black py-2 px-2  rounded shadow"
+                                >
+                                  <p className="section-todoitem-header-name">
+                                    {item.name}
+                                  </p>
+                                  <div className="section-todoitem-header-button-toggler">
+                                    {item.isOpenItemDetail !== true ? (
+                                      <IconDown />
+                                    ) : (
+                                      <IconUp />
+                                    )}
                                   </div>
-                                  {item.isEditItemName !== true ? (
-                                    <div className="section-todoitem-detail-description bg-gray-200 text-gray-600  text-sm py-2 px-2  rounded shadow">
-                                      <span className="text-gray-700">
-                                        DESCRIPTION:&nbsp;
-                                      </span>
-                                      {item.description ? (
-                                        <div>{item.description}</div>
-                                      ) : (
-                                        <div className="text-sm text-gray-400">
-                                          Description?
-                                        </div>
-                                      )}
-                                    </div>
-                                  ) : (
-                                    <div className="flex-1">
-                                      <Textarea
-                                        value={item.description || ''}
-                                        onChange={(event) =>
-                                          onEditTodoDescription(event, item.id)
-                                        }
-                                        placeholder={'Description?'}
-                                        rows={4}
-                                        autoFocus={false}
-                                        maxLength={300}
-                                      />
-                                    </div>
-                                  )}
+                                </div>
+                              ) : (
+                                <div className="mr-4 flex-1">
+                                  <Input
+                                    value={item.name || ''}
+                                    onChange={(event) =>
+                                      onEditTodoName(event, item.id)
+                                    }
+                                    placeholder={'Edit Todo*'}
+                                    maxLength={50}
+                                    autoFocus={true}
+                                  />
                                 </div>
                               )
-
+                              //}}}
+                            }
+                            {
+                              // section-todoitem-header-button-edit{{{
+                              <div className="section-todoitem-header-button-edit">
+                                {item.isEditItemName !== true ? (
+                                  <button
+                                    className="button-edit button-edit w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2 text-center"
+                                    onClick={() => onSetIsEdit(item.id)}
+                                  >
+                                    <IconEdit />
+                                  </button>
+                                ) : (
+                                  <button
+                                    className="button-update w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow mr-2"
+                                    onClick={() => {
+                                      onUpdateTodo(item.id, item.name)
+                                    }}
+                                  >
+                                    <IconCheck />
+                                  </button>
+                                )}
+                              </div>
+                              //}}}
+                            }
+                            {
+                              // section-todoitem-header-button-delete{{{
+                              <div className="section-todoitem-header-button-delete">
+                                <button
+                                  className="button-delete w-8 h-10 bg-gray-300 hover:bg-gray-300 text-black py-2 px-2 rounded shadow"
+                                  onClick={() => {
+                                    onDeleteTodo(item.id)
+                                  }}
+                                >
+                                  <IconDelete />
+                                </button>
+                              </div>
                               //}}}
                             }
                           </div>
+                          <div className="section-todoitem-detail">
+                            <div className="section-todoitem-detail-description">
+                              {
+                                item.isOpenItemDetail && (
+                                  // section-todoitem-detail-edit {{{
+                                  <div className="section-todoitem-details">
+                                    <div className="seciton-todoitem-details-meta">
+                                      <div className="section-todoitem-detail-createdAt flex bg-gray-200 text-gray-600 text-sm py-0.5 px-2 rounded shadow">
+                                        <span className="text-gray-700">
+                                          CREATED:&nbsp;
+                                        </span>
+                                        <DateItem date={item.createdAt} />
+                                      </div>
+                                      <div className="section-todoitem-detail-updateAt flex bg-gray-200 text-gray-600 text-sm py-0.5 px-2 rounded shadow">
+                                        <span className="text-gray-700">
+                                          UPDATED:&nbsp;
+                                        </span>
+                                        <DateItem date={item.updatedAt} />
+                                      </div>
+                                    </div>
+                                    {item.isEditItemName !== true ? (
+                                      <div className="section-todoitem-detail-description bg-gray-200 text-gray-600  text-sm py-2 px-2  rounded shadow">
+                                        <span className="text-gray-700">
+                                          DESCRIPTION:&nbsp;
+                                        </span>
+                                        {item.description ? (
+                                          <div>{item.description}</div>
+                                        ) : (
+                                          <div className="text-sm text-gray-400">
+                                            Description?
+                                          </div>
+                                        )}
+                                      </div>
+                                    ) : (
+                                      <div className="flex-1">
+                                        <Textarea
+                                          value={item.description || ''}
+                                          onChange={(event) =>
+                                            onEditTodoDescription(
+                                              event,
+                                              item.id
+                                            )
+                                          }
+                                          placeholder={'Description?'}
+                                          rows={4}
+                                          autoFocus={false}
+                                          maxLength={300}
+                                        />
+                                      </div>
+                                    )}
+                                  </div>
+                                )
+
+                                //}}}
+                              }
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    )
-                )}
-              </div>
-            ) : (
-              <NoItem message="No todo items" />
-            )}
-          </div>
-        )
-        //}}}
-      }
-    </div>
+                      )
+                  )}
+                </div>
+              ) : (
+                <NoItem message="No todo items" />
+              )}
+            </div>
+          )
+          //}}}
+        }
+      </div>
+    </Layout>
   )
 }
 
 Amplify.configure(awsExports)
-Auth.configure(awsExports)
+// Auth.configure(awsExports)
 
 function Index() {
   const [authState, setAuthState] = React.useState(null)

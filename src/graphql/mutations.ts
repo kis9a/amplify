@@ -15,7 +15,7 @@ export const createTodo = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`
 export const updateTodo = /* GraphQL */ `
   mutation UpdateTodo(
     $input: UpdateTodoInput!
@@ -29,7 +29,7 @@ export const updateTodo = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`
 export const deleteTodo = /* GraphQL */ `
   mutation DeleteTodo(
     $input: DeleteTodoInput!
@@ -43,4 +43,4 @@ export const deleteTodo = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`

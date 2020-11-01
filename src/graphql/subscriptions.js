@@ -11,7 +11,7 @@ export const onCreateTodo = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`
 export const onUpdateTodo = /* GraphQL */ `
   subscription OnUpdateTodo {
     onUpdateTodo {
@@ -22,7 +22,7 @@ export const onUpdateTodo = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`
 export const onDeleteTodo = /* GraphQL */ `
   subscription OnDeleteTodo {
     onDeleteTodo {
@@ -33,4 +33,4 @@ export const onDeleteTodo = /* GraphQL */ `
       updatedAt
     }
   }
-`;
+`

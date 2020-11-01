@@ -151,7 +151,7 @@
     qrcode "^1.4.4"
     uuid "^8.2.0"
 
-"@aws-amplify/ui-components@^0.8.4":
+"@aws-amplify/ui-components@^0.8.7":
   version "0.8.7"
   resolved "https://registry.yarnpkg.com/@aws-amplify/ui-components/-/ui-components-0.8.7.tgz#dcfc2f6ba4e589d7fe31c8450a2338dc6ae54897"
   integrity sha512-uGgW7DOV8UNFuoKX1r0XSBNWGDJZ3YTgzSBTnn9O0AIK6tzGP1KLOQib0LDjk+lL6m8a6vCmG3ubIMcQ4gSUFw==
@@ -2875,9 +2875,9 @@ camelcase@^5.0.0, camelcase@^5.3.1:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 caniuse-lite@^1.0.30001173, caniuse-lite@^1.0.30001179, caniuse-lite@^1.0.30001181:
-  version "1.0.30001191"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001191.tgz#bacb432b6701f690c8c5f7c680166b9a9f0843d9"
-  integrity sha512-xJJqzyd+7GCJXkcoBiQ1GuxEiOBCLQ0aVW9HMekifZsAVGdj5eJ4mFB9fEhSHipq9IOk/QXFJUiIr9lZT+EsGw==
+  version "1.0.30001192"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001192.tgz#b848ebc0ab230cf313d194a4775a30155d50ae40"
+  integrity sha512-63OrUnwJj5T1rUmoyqYTdRWBqFFxZFlyZnRRjDR8NSUQFB6A+j/uBORU/SyJ5WzDLg4SPiZH40hQCBNdZ/jmAw==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -7579,6 +7579,11 @@ table@^5.2.3:
     lodash "^4.17.14"
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
+
+tailwind-hamburgers@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/tailwind-hamburgers/-/tailwind-hamburgers-1.0.2.tgz#b70e1372e9fa348c0e7dee100456dbbb863fd15f"
+  integrity sha512-TPDEslkYHbsELXHeKblaQUtxWXHRo5t8/Gh/aFK4IKOWUSsoqBcV6ojYsUTY4jMgRJFmhHyqjW2UfJhR2Ugxyw==
 
 tailwindcss@^2.0.3:
   version "2.0.3"
