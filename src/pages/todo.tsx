@@ -242,6 +242,7 @@ const Todo = () => {
         </div>
         //}}}
       }
+      <hr className="mt-4" />
       {
         //{{{ section-todos
         isLoading ? (
