@@ -15,16 +15,16 @@ const Nav: FC<NavProps> = ({ onTransition }) => {
     onTransition()
   }
   return (
-    <div className="nav-container absolute top-0 bottom-0 right-0 left-0 flex flex-col items-center bg-gray-300">
+    <div className="nav-container absolute top-0 bottom-0 right-0 left-0 flex flex-col items-center bg-white">
       <div className="section-nav-links w-full max-w-screen-md p-4 mt-14">
         <div
-          className="section-nav-link items-center justify-between text-black py-2 px-2 my-2 rounded shadow"
+          className="section-nav-link items-center justify-between text-black py-2 px-2 my-2 rounded shadow bg-gray-200"
           onClick={() => onClickLink('./')}
         >
           <span>Home</span>
         </div>
         <div
-          className="section-nav-link items-center justify-between text-black py-2 px-2 my-2 rounded shadow"
+          className="section-nav-link items-center justify-between text-black py-2 px-2 my-2 rounded shadow bg-gray-200"
           onClick={() => onClickLink('./todo')}
         >
           <span>Todo</span>

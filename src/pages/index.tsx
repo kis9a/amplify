@@ -21,10 +21,8 @@ function Index() {
 
   return authState === AuthState.SignedIn && user ? (
     <div className="App">
-      <div className="w-full text-right">
-        <div className="w-12 mt-32 rounded">
-          <AmplifySignOut />
-        </div>
+      <div className="w-full">
+        <AmplifySignOut />
       </div>
     </div>
   ) : (

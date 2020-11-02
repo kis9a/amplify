@@ -23,7 +23,7 @@ const Input: FC<InputProps> = ({
       placeholder={placeholder || ''}
       maxLength={maxLength}
       autoFocus={autoFocus}
-      className="shadow appearance-none border rounded w-full py-2 px-2 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+      className="break-all overflow-wrap shadow appearance-none border rounded w-full py-2 px-2 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
     />
   )
 }

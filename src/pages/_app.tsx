@@ -21,8 +21,7 @@ function App({ Component, pageProps }: AppProps) {
           onClickTham={() => setIsOpenThem(!isOpenThem)}
         />
       </header>
-      <div className="mt-14">
-        <hr />
+      <div className="mt-20">
         {isOpenThem && <Nav onTransition={() => setIsOpenThem(false)} />}
         {
           <div className="m-4">

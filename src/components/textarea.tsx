@@ -21,11 +21,12 @@ const Textarea: FC<TextareaProps> = ({
     <textarea
       value={value}
       onChange={(event) => onChange(event)}
+      overflow-wrap
       rows={rows}
       placeholder={placeholder || ''}
       maxLength={maxLength}
       autoFocus={autoFocus}
-      className="textarea-description shadow appearance-none border rounded w-full py-2 pl-3 pr-12 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
+      className="break-all textarea-description shadow appearance-none border rounded w-full py-2 pl-3 pr-12 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
     />
   )
 }

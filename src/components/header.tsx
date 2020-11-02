@@ -8,7 +8,7 @@ export type HeaderProps = {
 const Header: FC<HeaderProps> = ({ onClickTham, isOpenTham = false }) => {
   return (
     <>
-      <div className="section-header fixed top-0 right-0 left-0 p-4 z-50">
+      <div className="section-header fixed top-0 right-0 left-0 p-4 z-50 bg-white">
         <div className="section-tham flex justify-end">
           <div
             className={`tham tham-e-squeeze tham-w-6 h-6 ${
