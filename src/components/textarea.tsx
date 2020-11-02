@@ -12,10 +12,10 @@ type TextareaProps = {
 const Textarea: FC<TextareaProps> = ({
   value,
   onChange,
-  rows,
-  placeholder,
-  maxLength,
-  autoFocus,
+  rows = 4,
+  placeholder = '',
+  maxLength = 300,
+  autoFocus = false,
 }) => {
   return (
     <textarea

@@ -1,21 +1,11 @@
 import React, { FC } from 'react'
 
-type LinkItem = {
-  name: string
-  path: string
-}
-
 export type HeaderProps = {
-  onClickTham?: () => void
-  isOpenTham?: boolean
-  links?: LinkItem[]
+  onClickTham: () => void
+  isOpenTham: boolean
 }
 
-const Header: FC<HeaderProps> = ({
-  onClickTham,
-  links = [],
-  isOpenTham = false,
-}) => {
+const Header: FC<HeaderProps> = ({ onClickTham, isOpenTham = false }) => {
   return (
     <>
       <div className="section-header fixed top-0 right-0 left-0 p-4 z-50">
@@ -32,14 +22,6 @@ const Header: FC<HeaderProps> = ({
           </div>
         </div>
       </div>
-      {isOpenTham && (
-        <div className="section-header-sidemenu">
-          {links.map(
-            (link: LinkItem, index: number) =>
-              link && <div key={index}>{link.name}</div>
-          )}
-        </div>
-      )}
     </>
   )
 }

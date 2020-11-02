@@ -11,9 +11,9 @@ type InputProps = {
 const Input: FC<InputProps> = ({
   value,
   onChange,
-  placeholder,
-  maxLength,
-  autoFocus,
+  placeholder = '',
+  maxLength = 50,
+  autoFocus = false,
 }) => {
   return (
     <input
