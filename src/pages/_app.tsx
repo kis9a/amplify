@@ -45,6 +45,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   useEffect(() => {
     getCurrentUserInfo()
+    console.log(authState)
   }, [authState])
 
   const getCurrentUserInfo = async () => {
