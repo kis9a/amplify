@@ -1,10 +1,13 @@
-// import App from "next/app";
+import Amplify from '@aws-amplify/core'
+import awsExports from '../aws-exports'
 import type { AppProps /*, AppContext */ } from 'next/app'
 import React, { useState } from 'react'
 import Nav from '../components/nav'
 import Header from '../components/header'
 import Head from 'next/head'
 import '../styles/globals.css'
+
+Amplify.configure(awsExports)
 
 function App({ Component, pageProps }: AppProps) {
   const [isOpenThem, setIsOpenThem] = useState(false)

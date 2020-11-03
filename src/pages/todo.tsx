@@ -18,7 +18,7 @@ import {
   CreateTodoInput,
   UpdateTodoInput,
   DeleteTodoInput,
-  ListTodosQuery
+  ListTodosQuery,
 } from '../types/API'
 
 type TodoItem = {
@@ -39,7 +39,7 @@ const Todo = () => {
   const [newTodoNameInput, setNewTodoNameInput] = useState<string>('')
   const [
     newTodoDescriptionInput,
-    setNewTodoDescriptionInput
+    setNewTodoDescriptionInput,
   ] = useState<string>('')
   const [isOpenItemDetail, setIsOpenItemDetail] = useState<boolean>(false)
   //}}}
@@ -48,7 +48,7 @@ const Todo = () => {
   const onCreateTodo = async () => {
     const data: CreateTodoInput = {
       name: newTodoNameInput,
-      description: newTodoDescriptionInput
+      description: newTodoDescriptionInput,
     }
     if (newTodoNameInput && newTodoNameInput.trim().length > 0) {
       try {
@@ -70,8 +70,8 @@ const Todo = () => {
             name: newTodoNameInput,
             description: newTodoDescriptionInput,
             createdAt: `${new Date()}`,
-            updateAt: `${new Date()}`
-          }
+            updateAt: `${new Date()}`,
+          },
         ]
         setTodoItems(newTodoItems)
 

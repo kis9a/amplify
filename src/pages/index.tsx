@@ -1,10 +1,6 @@
 import React from 'react'
-import Amplify from '@aws-amplify/core'
-import awsExports from '../aws-exports'
 import { AmplifyAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
-
-Amplify.configure(awsExports)
 
 function Index() {
   const [authState, setAuthState] = React.useState(null)
