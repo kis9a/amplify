@@ -14,5 +14,3 @@
 ```bash
 npx create-next-app --example with-typescript-eslint-jest with-typescript-eslint-jest-app
 ```
-
-70708127
