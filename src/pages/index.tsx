@@ -2,7 +2,7 @@ import React from 'react'
 import { AmplifyAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react'
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components'
 
-function Index() {
+const Index = () => {
   const [authState, setAuthState] = React.useState(null)
   const [user, setUser] = React.useState(null)
 
