@@ -18,7 +18,7 @@ import {
   CreateTodoInput,
   UpdateTodoInput,
   DeleteTodoInput,
-  ListTodosQuery,
+  ListTodosQuery
 } from '../types/API'
 
 type TodoItem = {
@@ -39,7 +39,7 @@ const Todo = () => {
   const [newTodoNameInput, setNewTodoNameInput] = useState<string>('')
   const [
     newTodoDescriptionInput,
-    setNewTodoDescriptionInput,
+    setNewTodoDescriptionInput
   ] = useState<string>('')
   const [isOpenItemDetail, setIsOpenItemDetail] = useState<boolean>(false)
   //}}}
@@ -48,7 +48,7 @@ const Todo = () => {
   const onCreateTodo = async () => {
     const data: CreateTodoInput = {
       name: newTodoNameInput,
-      description: newTodoDescriptionInput,
+      description: newTodoDescriptionInput
     }
     if (newTodoNameInput && newTodoNameInput.trim().length > 0) {
       try {
@@ -70,8 +70,8 @@ const Todo = () => {
             name: newTodoNameInput,
             description: newTodoDescriptionInput,
             createdAt: `${new Date()}`,
-            updateAt: `${new Date()}`,
-          },
+            updateAt: `${new Date()}`
+          }
         ]
         setTodoItems(newTodoItems)
 
@@ -333,20 +333,6 @@ const Todo = () => {
                               item.isOpenItemDetail && (
                                 // section-todoitem-detail-edit {{{
                                 <div className="section-todoitem-details">
-                                  <div className="seciton-todoitem-details-meta">
-                                    <div className="section-todoitem-detail-createdAt flex bg-gray-200 text-gray-600 text-sm py-0.5 px-2 rounded shadow">
-                                      <span className="text-gray-700">
-                                        CREATED:&nbsp;
-                                      </span>
-                                      <DateItem date={item.createdAt} />
-                                    </div>
-                                    <div className="section-todoitem-detail-updateAt flex bg-gray-200 text-gray-600 text-sm py-0.5 px-2 rounded shadow">
-                                      <span className="text-gray-700">
-                                        UPDATED:&nbsp;
-                                      </span>
-                                      <DateItem date={item.updatedAt} />
-                                    </div>
-                                  </div>
                                   {item.isEditItemName !== true ? (
                                     <div className="section-todoitem-detail-description bg-gray-200 text-gray-600  text-sm py-2 px-2  rounded shadow">
                                       <span className="text-gray-700">
@@ -374,6 +360,20 @@ const Todo = () => {
                                       />
                                     </div>
                                   )}
+                                  <div className="seciton-todoitem-details-meta">
+                                    <div className="section-todoitem-detail-createdAt flex bg-gray-200 text-gray-600 text-sm py-0.5 px-2 rounded shadow">
+                                      <span className="text-gray-700">
+                                        CREATED:&nbsp;
+                                      </span>
+                                      <DateItem date={item.createdAt} />
+                                    </div>
+                                    <div className="section-todoitem-detail-updateAt flex bg-gray-200 text-gray-600 text-sm py-0.5 px-2 rounded shadow">
+                                      <span className="text-gray-700">
+                                        UPDATED:&nbsp;
+                                      </span>
+                                      <DateItem date={item.updatedAt} />
+                                    </div>
+                                  </div>
                                 </div>
                               )
                               //}}}
