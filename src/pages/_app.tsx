@@ -1,5 +1,6 @@
 import Amplify from '@aws-amplify/core'
 import Auth from '@aws-amplify/auth'
+import { Hub } from 'aws-amplify'
 import awsExports from '../aws-exports'
 import type { AppProps /*, AppContext */ } from 'next/app'
 import React, { useState, useEffect } from 'react'
@@ -21,10 +22,30 @@ interface UserInfo {
 const App = ({ Component, pageProps }: AppProps) => {
   const [isOpenThem, setIsOpenThem] = useState<boolean>(false)
   const [userInfo, setUserInfo] = useState<UserInfo>({ email: '' })
+  const [authState, setAuthState] = useState<string>('')
+
+  Hub.listen('auth', (data) => {
+    switch (data.payload.event) {
+      case 'signIn':
+        setAuthState('signIn')
+        break
+      case 'signUp':
+        setAuthState('signUp')
+        break
+      case 'signOut':
+        setAuthState('signOut')
+        break
+      case 'signIn_failure':
+        setAuthState('signIn_failure')
+        break
+      case 'configured':
+        setAuthState('configured')
+    }
+  })
 
   useEffect(() => {
     getCurrentUserInfo()
-  }, [])
+  }, [authState])
 
   const getCurrentUserInfo = async () => {
     try {
@@ -33,6 +54,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       setUserInfo(attributes)
     } catch (error) {
       console.error(error)
+      setUserInfo({ email: '' })
     }
   }
 

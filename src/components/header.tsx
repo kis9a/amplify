@@ -9,14 +9,14 @@ export type HeaderProps = {
 const Header: FC<HeaderProps> = ({
   onClickTham,
   isOpenTham = false,
-  userName = '',
+  userName = 'Welcome',
 }) => {
   return (
     <>
       <div className="flex justify-between section-header fixed top-0 right-0 left-0 p-4 z-50 bg-white">
         <div>
           <p className="bg-gray-200 text-gray-800 text-bold p-2 px-2 rounded">
-            {userName}
+            {userName ? userName : 'Welcome!'}
           </p>
         </div>
         <div className="section-tham">
