@@ -1,6 +1,6 @@
 import Amplify from '@aws-amplify/core'
 import Auth from '@aws-amplify/auth'
-import { Hub } from 'aws-amplify'
+import { Hub, Logger } from 'aws-amplify'
 import awsExports from '../aws-exports'
 import type { AppProps /*, AppContext */ } from 'next/app'
 import React, { useState, useEffect } from 'react'
@@ -23,25 +23,41 @@ const App = ({ Component, pageProps }: AppProps) => {
   const [isOpenThem, setIsOpenThem] = useState<boolean>(false)
   const [userInfo, setUserInfo] = useState<UserInfo>({ email: '' })
   const [authState, setAuthState] = useState<string>('')
+  const logger = new Logger('hub-logger')
 
-  Hub.listen('auth', (data) => {
+  const listener = (data) => {
     switch (data.payload.event) {
       case 'signIn':
         setAuthState('signIn')
+        logger.info('user signed in')
         break
       case 'signUp':
         setAuthState('signUp')
+        logger.info('user signed up')
         break
       case 'signOut':
         setAuthState('signOut')
+        logger.info('user signed out')
         break
       case 'signIn_failure':
         setAuthState('signIn_failure')
+        logger.error('user sign in failed')
+        break
+      case 'tokenRefresh':
+        setAuthState('tokenRefresh')
+        logger.info('token refresh succeeded')
+        break
+      case 'tokenRefresh_failure':
+        setAuthState('tokenRefresh_failure')
+        logger.error('token refresh failed')
         break
       case 'configured':
         setAuthState('configured')
+        logger.info('the Auth module is configured')
     }
-  })
+  }
+
+  Hub.listen('auth', listener)
 
   useEffect(() => {
     getCurrentUserInfo()
